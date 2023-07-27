@@ -2,4 +2,4 @@
 schooltool.api_url  (schooltool API URL)   string http://localhost:1337/api/students
 
 # the strapi api token
-scholtool.api_token (schooltool API Token) string secret_token
+schooltool.api_token (schooltool API Token) string secret_token
