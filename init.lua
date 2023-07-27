@@ -18,7 +18,7 @@ minetest.log("action", "API-Token: " .. api_token)
 
 
 local http_api = minetest.request_http_api()
-assert(http_api, "HTTP API unavailable. Please add `schooltool` to secure.trusted_mods in minetest.conf!")
+assert(http_api, "HTTP API unavailable. Please add `schooltool` to secure.trusted_mods and secure.http_mods in minetest.conf!")
 
 -- Registriere eine Shutdown-Funktion
 minetest.after(0, function()
