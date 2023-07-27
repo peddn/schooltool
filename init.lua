@@ -21,48 +21,11 @@ local http_api = minetest.request_http_api()
 assert(http_api, "HTTP API unavailable. Please add `schooltool` to secure.trusted_mods and secure.http_mods in minetest.conf!")
 
 
-
-
-
--- Funktion, um alle registrierten Spieler auszulesen
-function getRegisteredPlayers()
-    local auth_handler = minetest.get_auth_handler()
-
-    -- Holen aller registrierten Benutzer
-    local registeredPlayers = {}
-
-    -- Iterator für alle Spieler in der Authentifizierungsdatenbank
-    local player_iterator = auth_handler.iterate()
-
-    -- Durchlaufe alle Spieler und füge sie zur Liste hinzu
-    for player_name in player_iterator do
-        table.insert(registeredPlayers, player_name)
-    end
-
-    return registeredPlayers
-end
-
--- Registriere das Chat-Kommando
-minetest.register_chatcommand("reg_players", {
-    description = "List all registered players in the world.",
-    func = function()
-        local registeredPlayers = getRegisteredPlayers()
-
-        -- Sende die Liste der registrierten Spieler an den Spieler, der das Kommando ausgeführt hat
-        local player_name = minetest.get_player_by_name(minetest.get_last_run_mod()) or ""
-        minetest.chat_send_player(player_name, "Registered Players:")
-
-        if #registeredPlayers > 0 then
-            for _, player_name in ipairs(registeredPlayers) do
-                minetest.chat_send_player(player_name, " - " .. player_name)
-            end
-        else
-            minetest.chat_send_player(player_name, "No registered players found.")
-        end
-    end,
-})
-
-
+minetest.after(0,function()
+	for name, value in minetest.get_auth_handler().iterate() do
+		minetest.log("action", "[schooltool]: " .. name)
+	end
+end)
 
 
 -- Registriere eine Shutdown-Funktion
