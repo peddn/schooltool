@@ -1,3 +1,24 @@
+-- Lade die Einstellungen
+local settings = minetest.settings
+
+local world_path = core.get_worldpath()
+
+-- lesen globale Einstellungen
+local admin = minetest.settings:get("name")
+
+-- Lese die Einstellungen
+local api_url = minetest.settings:get("schooltool.api_url") or "http://localhost:1337/api/students"
+local api_token = minetest.settings:get("schooltool.api_token") or "secret_token"
+
+-- Protokolliere die Einstellungen
+minetest.log("action", "admin: " .. admin)
+minetest.log("action", "API-URL: " .. api_url)
+minetest.log("action", "API-Token: " .. api_token)
+
+-- http-api
+local http_api = minetest.request_http_api()
+assert(http_api, "HTTP API unavailable. Please add `schooltool` to secure.trusted_mods and secure.http_mods in minetest.conf!")
+
 -- nach der Initialisierung
 minetest.after(0, function()
     -- Sende eine GET-Anfrage an die API
