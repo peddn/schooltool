@@ -24,15 +24,18 @@ assert(http_api, "HTTP API unavailable. Please add `schooltool` to secure.truste
 
 
 
--- Funktion, um alle registrierten Spieler aus der Authentifizierungsdatenbank auszulesen
+-- Funktion, um alle registrierten Spieler auszulesen
 function getRegisteredPlayers()
     local auth_handler = minetest.get_auth_handler()
 
     -- Holen aller registrierten Benutzer
     local registeredPlayers = {}
-    local players = auth_handler.get_auth()
 
-    for player_name, _ in pairs(players) do
+    -- Iterator für alle Spieler in der Authentifizierungsdatenbank
+    local player_iterator = auth_handler.iterate()
+
+    -- Durchlaufe alle Spieler und füge sie zur Liste hinzu
+    for player_name in player_iterator do
         table.insert(registeredPlayers, player_name)
     end
 
@@ -46,13 +49,18 @@ minetest.register_chatcommand("reg_players", {
         local registeredPlayers = getRegisteredPlayers()
 
         -- Sende die Liste der registrierten Spieler an den Spieler, der das Kommando ausgeführt hat
-        minetest.chat_send_player(minetest.get_player_by_name(minetest.get_last_run_mod()) or "", "Registered Players:")
-        for _, player_name in ipairs(registeredPlayers) do
-            minetest.chat_send_player(minetest.get_player_by_name(minetest.get_last_run_mod()) or "", " - " .. player_name)
+        local player_name = minetest.get_player_by_name(minetest.get_last_run_mod()) or ""
+        minetest.chat_send_player(player_name, "Registered Players:")
+
+        if #registeredPlayers > 0 then
+            for _, player_name in ipairs(registeredPlayers) do
+                minetest.chat_send_player(player_name, " - " .. player_name)
+            end
+        else
+            minetest.chat_send_player(player_name, "No registered players found.")
         end
     end,
 })
-
 
 
 
