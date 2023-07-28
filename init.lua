@@ -30,7 +30,8 @@ minetest.after(0, function()
         if not result.succeeded then
             minetest.log("error", "Fehler beim Abrufen der Daten von der API.")
             return
-
+        end
+        
         -- Protokolliere die empfangenen Daten
         minetest.log("action", "Daten von der API empfangen: " .. result.data)
 
